@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -11,7 +13,9 @@ import (
 
 func main() {
 	q := getQuestion()
-	sendReq(q)
+	bytArr := sendReq(q)
+	r := processResponse(bytArr)
+	fmt.Println("response", r)
 }
 func getQuestion() string {
 	r := bufio.NewReader(os.Stdin)
@@ -21,22 +25,26 @@ func getQuestion() string {
 		panic(err)
 	}
 	question := strings.TrimSpace(q)
-	// fmt.Println("Question: ", question)
 	return question
 }
-func sendReq(q string) {
+func sendReq(question string) []byte {
 	baseUrl := "https://8ball.delegator.com/magic/JSON/"
-	url := fmt.Sprintf("%s%s", baseUrl, q)
+	url := fmt.Sprintf("%s%s", baseUrl, question)
 	res, err := http.Get(url)
 	if err != nil {
 		panic(err)
 	}
-	// fmt.Println("Response: ", res)
-	body, err := ioutil.ReadAll(res.Body)
+	bodyByt, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		panic(err)
 	}
-	// fmt.Println("Body: ", body)
-	strBody := string(body)
-	fmt.Println(strBody)
+	return bodyByt
+}
+func processResponse(b []byte) Response {
+	var body Response
+	err := json.Unmarshal(b, &body)
+	if err != nil {
+		log.Println(err)
+	}
+	return body
 }
