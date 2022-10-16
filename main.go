@@ -11,15 +11,16 @@ import (
 	"strings"
 )
 
+// NOTE: must run BOTH main.go AND structs.go
 func main() {
 	q := getQuestion()
 	bytArr := sendReq(q)
 	r := processResponse(bytArr)
-	fmt.Println("response", r)
+	fmt.Println(r.M.A)
 }
 func getQuestion() string {
 	r := bufio.NewReader(os.Stdin)
-	fmt.Println("Enter a question...")
+	fmt.Println("Enter a question ...")
 	q, err := r.ReadString('\n')
 	if err != nil {
 		panic(err)
@@ -41,10 +42,12 @@ func sendReq(question string) []byte {
 	return bodyByt
 }
 func processResponse(b []byte) Response {
-	var body Response
-	err := json.Unmarshal(b, &body)
+	var res Response
+	err := json.Unmarshal(b, &res)
 	if err != nil {
 		log.Println(err)
 	}
-	return body
+	return res
 }
+
+// var body map[string]interface{}
