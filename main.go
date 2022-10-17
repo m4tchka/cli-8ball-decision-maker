@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -38,7 +38,7 @@ func sendReq(question string) []byte {
 	if err != nil {
 		panic(err)
 	}
-	bodyByt, err := ioutil.ReadAll(res.Body)
+	bodyByt, err := io.ReadAll(res.Body)
 	if err != nil {
 		panic(err)
 	}
