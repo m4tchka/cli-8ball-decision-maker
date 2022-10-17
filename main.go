@@ -14,13 +14,16 @@ import (
 // NOTE: must run BOTH main.go AND structs.go
 func main() {
 	q := getQuestion()
-	bytArr := sendReq(q)
-	r := processResponse(bytArr)
-	fmt.Println(r.M.A)
+	for q != "..." {
+		bytArr := sendReq(q)
+		r := processResponse(bytArr)
+		fmt.Println(r.M.A)
+		q = getQuestion()
+	}
 }
 func getQuestion() string {
 	r := bufio.NewReader(os.Stdin)
-	fmt.Println("Enter a question ...")
+	fmt.Println("Enter a question (or ... to exit)")
 	q, err := r.ReadString('\n')
 	if err != nil {
 		panic(err)
