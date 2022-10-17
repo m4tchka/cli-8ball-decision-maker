@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// NOTE: must run BOTH main.go AND structs.go
+// NOTE: Run BOTH main.go AND structs.go
 func main() {
 	q := getQuestion()
 	for q != "..." {
